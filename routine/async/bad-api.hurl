@@ -2,7 +2,7 @@ POST {{hostname}}/v1/smartapi/{{id}}/asyncquery
 [Options]
 variable: id=lalala
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {

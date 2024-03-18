@@ -3,7 +3,7 @@ POST {{hostname}}/v1/query
 dryrun: true
 
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {

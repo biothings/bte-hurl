@@ -1,6 +1,6 @@
 POST {{hostname}}/v1/team/Text%20Mining%20Provider/asyncquery
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {

@@ -1,7 +1,7 @@
 # Using DYRK1A as an example
 POST {{hostname}}/v1/asyncquery
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {

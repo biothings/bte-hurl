@@ -1,7 +1,7 @@
 POST {{hostname}}/v1/query
 
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {

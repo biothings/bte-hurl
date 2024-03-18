@@ -1,6 +1,6 @@
 POST {{hostname}}/v1/smartapi/d22b657426375a5295e7da8a303b9893/query
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {

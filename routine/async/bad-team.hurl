@@ -1,6 +1,6 @@
 POST {{hostname}}/v1/team/lalala/asyncquery
 {
-  "submitter": "bte-dev-tester-jackson",
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "nodes": {
