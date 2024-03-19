@@ -14,6 +14,7 @@ Usage: $(basename "$0") [options] [<file>...]
 
 Options:
   -e --env        Set the environment to use.
+  -a --all        Select all routine files (overrides file arguments).
   -t --test       Run files in test mode and don't capture output.
   -v --view       View response body in jless after each file completes.
   -n --no-view    Skip viewing responses in jless.
@@ -34,6 +35,10 @@ shopt -s extglob
 while true; do
   case "$1" in
     -e | --env ) ENV="$2"; shift 2 ;;
+    -a | --all )
+      IFS=$'\n' read -r -d '' -a FILES < <(find routine -type f -name '*.hurl')
+      shift
+      ;;
     -t | --test ) TEST=true; shift ;; 
     -v | --view ) VIEW=0; shift ;;
     -n | --no-view ) VIEW=1; shift ;;
