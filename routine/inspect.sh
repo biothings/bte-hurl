@@ -19,6 +19,7 @@ Options:
   -n --no-view    Skip viewing responses in jless.
   -o --out        Output body to path. Will prefix with index for multiple files.
   -s --skip-save  Don't save response and skip prompts to do so.
+  -d --debug      Only view files that don't pass their tests (overrides -v and -n).
   -h --help       Show this help mesasge and exit.
 "
 
@@ -27,6 +28,7 @@ FILES=()
 TEST=false
 VIEW=
 OUT=
+DEBUG=false
 # Get user options
 shopt -s extglob
 while true; do
@@ -37,6 +39,7 @@ while true; do
     -n | --no-view ) VIEW=1; shift ;;
     -o | --out ) OUT="$2"; shift 2 ;;
     -s | --skip-save ) OUT=1; shift ;;
+    -d | --debug ) DEBUG=true; VIEW=1; shift ;;
     -h | --help ) echo "$usage"; exit ;;
     -?(-)*=* ) echo "option assignment using '=' not supported"; exit ;;
     * ) 
@@ -58,16 +61,19 @@ fi
 
 # Prompt for files if none from arguments
 if [ "${#FILES[@]}" -eq 0 ]; then
-  read -ar FILES <<< "$(find routine -type f -name '*.hurl' | gum filter \
+  IFS=$'\n' read -r -d '' -a FILES < <( find routine -type f -name '*.hurl' \
+  | gum filter \
     --no-limit \
-      --fuzzy \
-      --height=10 \
-      --placeholder='Select file(s)...')"
+    --fuzzy \
+    --height=10 \
+    --placeholder='Select file(s)...' && printf '\0')
   [ $? -eq 130 ] && kill -INT $$
 fi
 
 index=0
 for file in "${FILES[@]}"; do
+  view="$VIEW"
+  [ "$DEBUG" = true ] && out=1 || out="$OUT"
   echo "$file"
   to_run="hurl $file --variables-file=env/$ENV" 
 
@@ -89,18 +95,25 @@ for file in "${FILES[@]}"; do
 
   # Show any errors
   if [ "$error_catch" != "" ]; then
+    [ "$DEBUG" ] && view='' && out="${OUT:-''}"
+    if [ "$DEBUG" ]; then
+      view=''
+      out=''
+      [ "$OUT" != "" ] && out="$OUT"
+    fi
+    
     gum log "Failed test on entry $last_entry; error below:" --level=error
     echo
     echo "$error_catch"
   fi
 
   # Show user output if desired
-  if [ "$VIEW" = "" ]; then
+  if [ "$view" = "" ]; then
     gum confirm 'View Output?'
-    VIEW=$?
     [ $? -eq 130 ] && kill -INT $$
+    view=$?
   fi
-  if [ "$VIEW" = 0 ]; then
+  if [ "$view" = 0 ]; then
     # echo "Test"
     if [ "$body" = "" ]; then
       echo "<empty body>"
@@ -110,15 +123,15 @@ for file in "${FILES[@]}"; do
   fi
 
   # Save ouput to file if desired
-  if [ "$OUT" = "" ]; then
+  if [ "$out" = "" ]; then
     gum confirm 'Save output to file?'
-    OUT=$?
     [ $? -eq 130 ] && kill -INT $$
+    out=$?
   fi
-  if [ "$OUT" != 1 ]; then
-    if [ "$OUT" != 0 ]; then
-      path_out="$OUT"
-      [ "$index" -gt 0 ] && path_out="$index-$OUT"
+  if [ "$out" != 1 ]; then
+    if [ "$out" != 0 ]; then
+      path_out="$out"
+      [ "$index" -gt 0 ] && path_out="$index-$out"
     else
       path_out="$(gum input --placeholder 'path/to/file.json' --header 'Output Path:')"
       [ $? -eq 130 ] && kill -INT $$
