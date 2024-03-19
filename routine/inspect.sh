@@ -58,9 +58,11 @@ while true; do
   esac
 done
 
+
 # Get environment if not set
 if [ "$ENV" = "" ]; then
-  ENV="$(find env -type f -exec basename {} \; | gum filter --height=5 --fuzzy --placeholder='Select environment...')"
+  ENV="$(find env -type f -exec basename {} \; \
+  | gum filter --height=5 --fuzzy --placeholder='Select environment...')"
 fi
 [ $? -eq 130 ] && kill -INT $$
 
@@ -94,9 +96,16 @@ for file in "${FILES[@]}"; do
   response="$(gum spin --show-output --title "Running hurl..." -- bash -c "eval $to_run 2>&1")"
   # Exit if cancelled
   [ $? -eq 130 ] && kill -INT $$
-  last_entry="$(echo "$response" | tac | grep 'Executing entry' -m1 | grep -Eo '[0-9]+')"
+  last_entry="$(echo "$response" \
+  | tac \
+  | grep 'Executing entry' -m1 \
+  | grep -Eo '[0-9]+')"
   error_catch="$(echo "$response" | awk '/error: .*/,0')"
-  body="$(echo "$response" | tac | grep "Response body:" -m1 -B1 | sed '1q;d' | cut -c 3-)"
+  body="$(echo "$response" \
+  | tac \
+  | grep "Response body:" -m1 -B1 \
+  | sed '1q;d' \
+  | cut -c 3-)"
 
   # Show any errors
   if [ "$error_catch" != "" ]; then
