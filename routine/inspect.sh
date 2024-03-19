@@ -115,8 +115,8 @@ for file in "${FILES[@]}"; do
   # Show user output if desired
   if [ "$view" = "" ]; then
     gum confirm 'View Output?'
-    [ $? -eq 130 ] && kill -INT $$
     view=$?
+    [ "$view" -eq 130 ] && kill -INT $$
   fi
   if [ "$view" = 0 ]; then
     # echo "Test"
@@ -130,8 +130,8 @@ for file in "${FILES[@]}"; do
   # Save ouput to file if desired
   if [ "$out" = "" ]; then
     gum confirm 'Save output to file?'
-    [ $? -eq 130 ] && kill -INT $$
     out=$?
+    [ "$out" -eq 130 ] && kill -INT $$
   fi
   if [ "$out" != 1 ]; then
     if [ "$out" != 0 ]; then
