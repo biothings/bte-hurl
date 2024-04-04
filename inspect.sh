@@ -2,7 +2,7 @@
 
 # Ensure script executes from desired dir
 cwd=$PWD
-execution_context="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"/.. 
+execution_context="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$execution_context" || exit 1
 
 trap "echo Aborted; exit" INT
@@ -68,7 +68,7 @@ fi
 
 # Prompt for files if none from arguments
 if [ "${#FILES[@]}" -eq 0 ]; then
-  IFS=$'\n' read -r -d '' -a FILES < <( find routine -type f -name '*.hurl' \
+  IFS=$'\n' read -r -d '' -a FILES < <( find . -type f -name '*.hurl' \
   | gum filter \
     --no-limit \
     --fuzzy \
