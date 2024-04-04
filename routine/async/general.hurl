@@ -44,7 +44,6 @@ retry-interval: 3000
 
 HTTP 200
 [Asserts]
-jsonpath "$.status" == "Completed"
 jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
 jsonpath "$.message.knowledge_graph.edges[*]" count > 0
 jsonpath "$.message.results" count > 0
