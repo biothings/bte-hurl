@@ -32,3 +32,9 @@ POST {{hostname}}/v1/team/Text%20Mining%20Provider/query
 }
 
 HTTP 200
+[Asserts]
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
+jsonpath "$.logs[-2:].message" nth 0 matches "\\(1\\) unique API"
+jsonpath "$.logs[*].level" not includes "ERROR"

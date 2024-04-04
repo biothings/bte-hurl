@@ -1,4 +1,4 @@
-POST {{hostname}}/v1/smartapi/d22b657426375a5295e7da8a303b9893/query
+POST {{hostname}}/v1/smartapi/59dce17363dce279d389100834e43648/query
 {
   "submitter": "bte-dev-tester-manual",
   "message": {
@@ -9,7 +9,7 @@ POST {{hostname}}/v1/smartapi/d22b657426375a5295e7da8a303b9893/query
             "biolink:Gene"
           ],
           "ids": [
-            "NCBIGene:3778"
+            "NCBIGene:1017"
           ]
         },
         "n1": {
@@ -23,7 +23,7 @@ POST {{hostname}}/v1/smartapi/d22b657426375a5295e7da8a303b9893/query
           "subject": "n0",
           "object": "n1",
           "predicates": [
-            "biolink:regulates"
+            "biolink:related_to"
           ]
         }
       }
@@ -32,3 +32,9 @@ POST {{hostname}}/v1/smartapi/d22b657426375a5295e7da8a303b9893/query
 }
 
 HTTP 200
+[Asserts]
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
+jsonpath "$.logs[-2:].message" nth 0 matches "\\(1\\) unique API"
+jsonpath "$.logs[*].level" not includes "ERROR"

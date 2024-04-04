@@ -10,7 +10,7 @@ POST {{hostname}}/v1/asyncquery
             "biolink:Disease"
           ],
           "ids": [
-            "MONDO:0016575"
+            "MONDO:0005148"
           ]
         },
         "n01": {
@@ -57,3 +57,8 @@ retry: 5
 retry-interval: 1000
 
 HTTP 200
+[Asserts]
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
+jsonpath "$.logs[*].level" not includes "ERROR"

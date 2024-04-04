@@ -47,6 +47,7 @@ POST {{hostname}}/v1/asyncquery
   }
 }
 
+
 HTTP 200 
 [Asserts]
 jsonpath "$.status" == "Accepted"
@@ -61,4 +62,18 @@ retry-interval: 30000
 HTTP 200
 [Asserts]
 jsonpath "$.status" == "Completed"
+jsonpath "$.logs[*].level" not includes "ERROR"
+[Captures]
+response_url: jsonpath "$.response_url"
+
+GET {{response_url}}
+[Options]
+retry: 5
+retry-interval: 1000
+
+HTTP 200
+[Asserts]
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
 jsonpath "$.logs[*].level" not includes "ERROR"

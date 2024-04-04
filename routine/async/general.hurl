@@ -35,9 +35,9 @@ HTTP 200
 [Asserts]
 jsonpath "$.status" == "Accepted"
 [Captures]
-job_url: jsonpath "$.job_url"
+job_id: jsonpath "$.job_id"
 
-GET {{job_url}}
+GET {{hostname}}/v1/asyncquery_response/{{job_id}}
 [Options]
 retry: 20
 retry-interval: 3000
@@ -45,4 +45,7 @@ retry-interval: 3000
 HTTP 200
 [Asserts]
 jsonpath "$.status" == "Completed"
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
 jsonpath "$.logs[*].level" not includes "ERROR"

@@ -33,3 +33,8 @@ POST {{hostname}}/v1/query
 }
 
 HTTP 200
+[Asserts]
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
+jsonpath "$.logs[*].level" not includes "ERROR"

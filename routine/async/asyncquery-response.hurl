@@ -49,6 +49,18 @@ jsonpath "$.status" == "Running"
 jsonpath "$.logs[*].level" not includes "ERROR"
 jsonpath "$.message" not exists
 
+# Check status endpoint shows Completed
+GET {{hostname}}/v1/asyncquery_status/{{job_id}}
+[Options]
+retry: 20
+retry-interval: 3000
+
+HTTP 200
+[Asserts]
+jsonpath "$.status" == "Completed"
+jsonpath "$.logs[*].level" not includes "ERROR"
+jsonpath "$.message" not exists
+
 # Check response eventually has full TRAPI response
 GET {{hostname}}/v1/asyncquery_response/{{job_id}}
 [Options]
@@ -57,5 +69,7 @@ retry-interval: 3000
 
 HTTP 200
 [Asserts]
+jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
+jsonpath "$.message.knowledge_graph.edges[*]" count > 0
+jsonpath "$.message.results" count > 0
 jsonpath "$.logs[*].level" not includes "ERROR"
-jsonpath "$.message" exists
