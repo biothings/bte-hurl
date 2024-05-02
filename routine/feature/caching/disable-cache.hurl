@@ -39,6 +39,7 @@ POST {{hostname}}/v1/query
 [QueryStringParams]
 caching: false
 {
+  "submitter": "bte-dev-tester-manual",
   "message": {
     "query_graph": {
       "edges": {
