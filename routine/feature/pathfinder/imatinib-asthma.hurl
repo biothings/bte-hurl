@@ -62,7 +62,7 @@ job_id: jsonpath "$.job_id"
 GET {{hostname}}/v1/asyncquery_response/{{job_id}}
 [Options]
 retry: 20
-retry-interval: 3000
+retry-interval: 30000
 
 HTTP 200
 [Asserts]
