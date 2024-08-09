@@ -153,7 +153,7 @@ for file in "${FILES[@]}"; do
   fi
   if [ "$path_out" != "" ]; then
     cd "$cwd" || exit 1
-    echo "$body" > path_out
+    echo "$body" > "$path_out"
     cd "$execution_context" || exit 1
   fi
   (( index+=0 ))
