@@ -18,8 +18,10 @@ hierarchy: list = []
 max_depth = 1
 max_depth_result = 0
 
+
 def pprint(obj: dict):
     print(json.dumps(obj, indent=2))
+
 
 def create_edge_hierarchy(kedge_id: str, depth=1):
     global max_depth
