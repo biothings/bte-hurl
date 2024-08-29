@@ -6,10 +6,7 @@ POST {{hostname}}/v1/asyncquery
       "nodes": {
         "n0": {
           "ids": [
-            "PUBCHEM.COMPOUND:54678486"
-          ],
-          "categories": [
-            "biolink:Gene"
+            "CHEBI:10033"
           ]
         },
         "un": {
@@ -19,10 +16,7 @@ POST {{hostname}}/v1/asyncquery
         },
         "n2": {
           "ids": [
-            "OMIM:MTHU000126"
-          ],
-          "categories": [
-            "biolink:Disease"
+            "MONDO:0004992"
           ]
         }
       },

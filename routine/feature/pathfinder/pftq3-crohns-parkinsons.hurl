@@ -7,9 +7,6 @@ POST {{hostname}}/v1/asyncquery
         "n0": {
           "ids": [
             "MONDO:0005011"
-          ],
-          "categories": [
-            "biolink:Disease"
           ]
         },
         "un": {
@@ -20,9 +17,6 @@ POST {{hostname}}/v1/asyncquery
         "n2": {
           "ids": [
             "MONDO:0005180"
-          ],
-          "categories": [
-            "biolink:Disease"
           ]
         }
       },

@@ -7,9 +7,6 @@ POST {{hostname}}/v1/asyncquery
         "n0": {
           "ids": [
             "NCBIGene:54716"
-          ],
-          "categories": [
-            "biolink:Gene"
           ]
         },
         "un": {
@@ -20,9 +17,6 @@ POST {{hostname}}/v1/asyncquery
         "n2": {
           "ids": [
             "MONDO:0100096"
-          ],
-          "categories": [
-            "biolink:Disease"
           ]
         }
       },

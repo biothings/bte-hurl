@@ -6,7 +6,7 @@ POST {{hostname}}/v1/asyncquery
       "nodes": {
         "n0": {
           "ids": [
-            "CHEBI:45713"
+            "CHEBI:9139"
           ]
         },
         "un": {
@@ -16,7 +16,7 @@ POST {{hostname}}/v1/asyncquery
         },
         "n2": {
           "ids": [
-            "NCBIGene:2739"
+            "HP:0100543"
           ]
         }
       },

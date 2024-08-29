@@ -7,9 +7,6 @@ POST {{hostname}}/v1/asyncquery
         "n0": {
           "ids": [
             "NCBIGene:3458"
-          ],
-          "categories": [
-            "biolink:Gene"
           ]
         },
         "un": {
@@ -19,10 +16,7 @@ POST {{hostname}}/v1/asyncquery
         },
         "n2": {
           "ids": [
-            "PUBCHEM.COMPOUND:6305"
-          ],
-          "categories": [
-            "biolink:Disease"
+            "CHEBI:16828"
           ]
         }
       },
