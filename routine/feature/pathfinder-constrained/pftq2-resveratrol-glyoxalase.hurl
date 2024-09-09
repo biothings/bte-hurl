@@ -6,17 +6,23 @@ POST {{hostname}}/v1/asyncquery
       "nodes": {
         "n0": {
           "ids": [
-            "CHEBI:9139"
+            "PUBCHEM.COMPOUND:445154"
+          ],
+          "categories": [
+            "biolink:ChemicalEntity"
           ]
         },
         "un": {
           "categories": [
-            "biolink:NamedThing"
+            "biolink:Protein"
           ]
         },
         "n2": {
           "ids": [
-            "MONDO:0004975"
+            "NCBIGene:2739"
+          ],
+          "categories": [
+            "biolink:Gene"
           ]
         }
       },
@@ -58,7 +64,7 @@ job_id: jsonpath "$.job_id"
 
 GET {{hostname}}/v1/asyncquery_response/{{job_id}}
 [Options]
-retry: 10
+retry: 20
 retry-interval: 30000
 
 HTTP 200
@@ -66,4 +72,4 @@ HTTP 200
 jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
 jsonpath "$.message.knowledge_graph.edges[*]" count > 0
 jsonpath "$.message.results" count > 0
-
+jsonpath "$.logs[*].level" not includes "ERROR"

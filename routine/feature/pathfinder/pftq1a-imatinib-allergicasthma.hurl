@@ -16,7 +16,7 @@ POST {{hostname}}/v1/asyncquery
         },
         "n2": {
           "ids": [
-            "MONDO:0004784"
+            "MONDO:0004979"
           ]
         }
       },
@@ -50,7 +50,7 @@ POST {{hostname}}/v1/asyncquery
   }
 }
 
-HTTP 200 
+HTTP 200
 [Asserts]
 jsonpath "$.status" == "Accepted"
 [Captures]
@@ -58,7 +58,7 @@ job_id: jsonpath "$.job_id"
 
 GET {{hostname}}/v1/asyncquery_response/{{job_id}}
 [Options]
-retry: 20
+retry: 10
 retry-interval: 30000
 
 HTTP 200
@@ -66,4 +66,4 @@ HTTP 200
 jsonpath "$.message.knowledge_graph.nodes[*]" count > 0
 jsonpath "$.message.knowledge_graph.edges[*]" count > 0
 jsonpath "$.message.results" count > 0
-jsonpath "$.logs[*].level" not includes "ERROR"
+

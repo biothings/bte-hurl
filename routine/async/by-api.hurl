@@ -31,7 +31,7 @@ POST {{hostname}}/v1/smartapi/d22b657426375a5295e7da8a303b9893/asyncquery
   }
 }
 
-HTTP 200 
+HTTP 200
 [Asserts]
 jsonpath "$.status" == "Accepted"
 [Captures]
