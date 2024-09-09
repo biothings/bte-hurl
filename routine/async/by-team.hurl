@@ -31,7 +31,7 @@ POST {{hostname}}/v1/team/Text%20Mining%20Provider/asyncquery
   }
 }
 
-HTTP 200 
+HTTP 200
 [Asserts]
 jsonpath "$.status" == "Accepted"
 [Captures]

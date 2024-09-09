@@ -48,7 +48,7 @@ POST {{hostname}}/v1/asyncquery
 }
 
 
-HTTP 200 
+HTTP 200
 [Asserts]
 jsonpath "$.status" == "Accepted"
 [Captures]

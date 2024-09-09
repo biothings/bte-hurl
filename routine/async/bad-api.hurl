@@ -33,7 +33,7 @@ variable: id=lalala
   }
 }
 
-HTTP 200 
+HTTP 200
 [Asserts]
 jsonpath "$.status" == "Accepted"
 [Captures]
