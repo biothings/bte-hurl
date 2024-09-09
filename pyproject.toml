@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "bte-hurl"
+version = "0.1.0"
+description = "A set of queries and analysis tools for evaluating BTE"
+authors = ["tokebe <43009413+tokebe@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "bte_hurl"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+bullet = "^2.2.0"
+typer = {extras = ["all"], version = "^0.12.5"}
+questionary = "^2.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
