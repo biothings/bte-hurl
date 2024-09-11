@@ -63,7 +63,16 @@ def get_paths(kg: dict, start: str, end: str, path=[]) -> list[list[str]]:
         return []
     paths = []
     for node in set(
-        edge["object"] for edge in kg["edges"].values() if edge["subject"] == start
+        edge["object"]
+        for edge in kg["edges"].values()
+        if (
+            edge["subject"] == start
+            and not any(
+                True
+                for attr in edge["attributes"]
+                if attr["attribute_type_id"] == "biolink:support_graphs"
+            )
+        )
     ):
         if node not in path:
             newpaths = get_paths(kg, node, end, path)
