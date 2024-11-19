@@ -1,4 +1,4 @@
-from trapi_testing_tools.tests import http, kg, results, logs
+from trapi_testing_tools.tests import kg, results, logs
 
 method = "POST"
 endpoint = "/v1/team/Text%20Mining%20Provider/query"
