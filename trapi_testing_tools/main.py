@@ -289,7 +289,6 @@ def main():
 def test_shortcut():
     """Very hacky shortcut to directly use the `test` command from a poetry script."""
     sys.argv.insert(1, "test")
-    print(sys.argv)
     app()
 
 
