@@ -228,5 +228,19 @@ def run_queries(
     """Given a set of queries, run each."""
     for file in files:
         file = file.resolve().relative_to(Path(trapi_testing_tools.__path__[0]).parent)
-        query = importlib.import_module(".".join(file.with_suffix("").parts))
+        if not file.exists():
+            console.print(f"ERROR: {file} does not exist. Skipping...")
+            continue
+        try:
+            query = importlib.import_module(".".join(file.with_suffix("").parts))
+        except Exception as error:
+            console.print(
+                f"ERROR: failed to read query file due to {repr(error)}. The query will be skipped."
+            )
+            with redirect_stdout(stderr):
+                if inquirer.confirm(
+                    "Print traceback for this error?", default=False
+                ).execute():
+                    console.print_exception(show_locals=True)
+            continue
         manage_query(query, url, view_mode, save_mode, save_path, on_fail)
