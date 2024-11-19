@@ -19,29 +19,29 @@ def no_debug_logs(response: httpx.Response) -> Optional[list[str]]:
 
 def log_one_api(response: httpx.Response) -> Optional[str]:
     body = response.json()
-    condition = next((log for log in body["logs"] if "(1) unique API" in log), False)
-    if condition:
+    has_log = next((log for log in body["logs"] if "(1) unique API" in log["message"]), False)
+    if not has_log:
         return "Missing log stating single unique API used"
 
 
 def missing_id_log(response: httpx.Response) -> Optional[str]:
     body = response.json()
-    condition = next(
+    has_log = next(
         (
             log
             for log in body["logs"]
-            if "Specified SmartAPI ID(lalala) is either invalid or missing." in log
+            if re.match(r"Specified SmartAPI ID(.*) is either invalid or missing.", log["message"])
             and log["level"] == "ERROR"
         ),
         False,
     )
-    if not condition:
+    if not has_log:
         return "Missing invalid smartapi error"
 
 
 def found_cache_log(response: httpx.Response) -> Optional[str]:
     body = response.json()
-    condition = next(
+    has_log = next(
         (
             log
             for log in body["logs"]
@@ -49,7 +49,7 @@ def found_cache_log(response: httpx.Response) -> Optional[str]:
         ),
         False,
     )
-    if not condition:
+    if not has_log:
         return "No logs report cached qEdges."
 
 
@@ -80,14 +80,14 @@ def no_cache_hits(response: httpx.Response) -> Optional[object]:
 
 def dryrun_log(response: httpx.Response) -> Optional[str]:
     body = response.json()
-    condition = next(
+    has_log = next(
         (
             log
             for log in body["logs"]
             if "Running dryrun of query, no API calls will be performed. Actual query execution order may vary based on API responses received."
-            in log
+            in log["message"]
         ),
         False,
     )
-    if condition:
+    if not has_log:
         return "Missing dryrun log"
