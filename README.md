@@ -1,45 +1,86 @@
+# TRAPI Testing tools
+
+A set of command-line tools for rapidly testing and analyzing various TRAPI resources.
+
 ## Getting started
 
-Install Hurl: https://hurl.dev/
+Install jless: [https://jless.io/](https://jless.io/)
+
+This project uses Poetry for package/dependency management. Install instructions: [https://python-poetry.org/docs/](https://python-poetry.org/docs/)
+
+Clone and set up workspace:
+
+```bash
+git clone https://github.com/biothings/trapi-testing-tools
+cd trapi-testing-tools
+poetry install
+# Get into the virtual environment
+poetry shell
+```
 
 ## Usage
 
-### Full tests
-
-To run a full test on local:
+All usage is documented in the `--help` option of the program:
 
 ```bash
-./routine/full-test.sh
+tt --help
 ```
 
-To run a full test on a specified environment, for example CI:
+Individual subcommands also provide help:
 
 ```bash
-./routine/full-test.sh --ci
+tt test --help
 ```
 
-To run a slightly quicker test for some basic functionality confirmation:
+### Routine tests
 
-```
-./routine/full-test.sh quick
+To run a full test of everything in the routine folder, against your local instance, viewing only failed tests:
+
+```bash
+tt test -a -d -e bte.local
 ```
 
 ### Specific tests
 
-Routine tests are designed to be given an environment and can't be run the same as a normal hurl file. You have to provide the variables-file:
+You can run the command `tt test` with no other arguments to interactively select tests. If you know the test(s) you want to run, you can provide them as arguments:
 
 ```bash
-hurl ./routine/metakg.hurl --variables-file env/ci --test
+tt test trapi-testing-tools/queries/routine/feature/creative/drug_treats_disease.hurl
 ```
 
-### Inspection
+### Retrieving a response from an ARS PK
 
-In order to inspect, remove `--test`. For example:
+A tool exists for retrieving responses from a PK:
 
 ```bash
-hurl ./routine/feature/creative/drug-treats-disease.hurl --variables-file env/local | jq -f analysis/node-frequency.jq
+tt pk <your-pk-here>
 ```
 
-A fancier way to run hurl files is available via `./routine/inspect.sh`. Requires [jless](https://github.com/PaulJuliusMartinez/jless) and [gum](https://github.com/charmbracelet/gum).
+For more information, see `tt pk --help`
 
-This script allows you to run multiple files, either by argument or interactive selection, against different instances, and regardless of test success or failure (failures are reported) will allow you to both inspect the response in jless and save the response to a file. For more information, run the script with the `--help` flag.
+## Writing a query
+
+You can add your own queries to be used in `tt test`, the specification is relatively simple:
+
+```python
+# Some tests are provided for validating the response
+from trapi_testing_tools.tests import http
+
+method = "POST"  # Use any HTTP method here
+endpoint = "/v1/query"  # The endpoint to be applied to the tool
+params = {...}  # You can optionally pass URL parameters as a dictionary of param_name: value
+body = {...}  # You can optionally add a body in the form of a dictionary
+tests = [http.status(200)]  # You can optionally set tests to validate the response
+```
+
+Queries placed under the `trapi_testing_tools/queries/routine` directory will be run when `tt test` is invoked with the option `--all`
+
+### Multi-query tests
+
+you can instead supply a list named `steps` with the above values as dictionary entries if you need to test consecutive related queries. See [`trapi_testing_tools/queries/routine/feature/caching/cache.py`](https://github.com/biothings/bte-hurl/blob/main/trapi_testing_tools/queries/routine/feature/caching/cache.py) for a good example.
+
+### Adding services to test
+
+Services are specified in [`config.yaml`](https://github.com/biothings/bte-hurl/blob/main/config.yaml). See the bte entry for an example.
+
+Services are selected either interactively or by adding `-e <service>.<level>` to the command. You can change the default service so you can more quickly type just the level when supplying the option to the command.
