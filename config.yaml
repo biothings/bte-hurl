@@ -1,0 +1,10 @@
+---
+timeout: 300
+environments:
+  default: bte
+  bte:
+    local: http://localhost:3000
+    dev: https://api.bte.ncats.io
+    ci: https://bte.ci.transltr.io
+    test: https://bte.test.transltr.io
+    prod: https://bte.transltr.io
