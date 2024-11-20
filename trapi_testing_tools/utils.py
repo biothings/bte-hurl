@@ -4,10 +4,11 @@ import subprocess
 from sys import stderr
 from typing import Literal, Optional
 import httpx
+from rich.text import Text
 import yaml
 from pathlib import Path
 import enum
-from rich.console import Console
+from rich.console import Console, RenderHook
 from InquirerPy import inquirer
 from rich.pretty import Pretty
 
@@ -28,6 +29,16 @@ for env, levels in config["environments"].items():
 if default:
     for level, url in config["environments"][default].items():
         EnvironmentMapping[level] = url
+
+
+class IndentedBlock(RenderHook):
+    def process_renderables(self, renderables):
+        new_renderables = []
+        for renderable in renderables:
+            if isinstance(renderable, Text):
+                new_renderables.append(Text("│ ", style="rule.line", end=""))
+            new_renderables.append(renderable)
+        return new_renderables
 
 
 def should_output(
@@ -60,7 +71,7 @@ def handle_output(
 
     if should_output(output, "view", view_mode):
         if isinstance(output, dict):
-            subprocess.run("jless", input=json.dumps(output), shell=True, text=True)
+            subprocess.run("fx", input=json.dumps(output), shell=True, text=True)
         else:
             subprocess.run("less", input=str(output), shell=True, text=True)
 

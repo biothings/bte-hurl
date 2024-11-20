@@ -4,7 +4,7 @@ A set of command-line tools for rapidly testing and analyzing various TRAPI reso
 
 ## Getting started
 
-Install jless: [https://jless.io/](https://jless.io/)
+Install fx: [https://fx.wtf/install](https://fx.wtf/install)
 
 This project uses Poetry for package/dependency management. Install instructions: [https://python-poetry.org/docs/](https://python-poetry.org/docs/)
 

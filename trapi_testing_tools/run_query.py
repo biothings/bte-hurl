@@ -1,6 +1,4 @@
-import json
 import importlib
-import subprocess
 import time
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -9,6 +7,7 @@ from types import ModuleType
 from typing import Callable, Literal, Optional, Union, cast
 
 import httpx
+from rich.text import Text
 import yaml
 from InquirerPy import inquirer
 from rich import box
@@ -17,7 +16,7 @@ from rich.panel import Panel
 from rich.pretty import Pretty
 
 import trapi_testing_tools
-from trapi_testing_tools.utils import handle_output
+from trapi_testing_tools.utils import IndentedBlock, handle_output
 
 console = Console(stderr=True)
 
@@ -145,6 +144,7 @@ def run_tests(query: dict, response: httpx.Response, passed: bool) -> bool:
                 title_align="left",
                 expand=False,
                 box=box.SQUARE,
+                border_style="red",
             )
             console.print(report_visual)
 
@@ -171,12 +171,16 @@ def manage_query(
     on_fail: bool,
 ) -> None:
     """Interpret query as single or multiple and manage steps in running it."""
-    console.rule()
-    console.print(
-        Path(cast(str, query_module.__file__)).relative_to(
-            Path(trapi_testing_tools.__path__[0]) / "queries"
-        )
+    console.rule(
+        Text("┌ ", style="rule.line")
+        + str(
+            Path(cast(str, query_module.__file__)).relative_to(
+                Path(trapi_testing_tools.__path__[0]) / "queries"
+            )
+        ),
+        align="left",
     )
+    console.push_render_hook(IndentedBlock())
 
     check_query_valid(query_module)
 
@@ -199,6 +203,8 @@ def manage_query(
     for query in queries:
         response, passed = run_query(query, url)
         if not response:
+            console.pop_render_hook()
+            console.print("└ No Response", style="rule.line")
             return
 
         if passed and query.get("tests", False):
@@ -216,6 +222,13 @@ def manage_query(
 
     handle_output(output, view_mode, save_mode, save_path)
 
+    console.pop_render_hook()
+    console.print(
+        f"└ {'[green]✓ Passed[/]' if passed else '[red]x Failed[/]'}",
+        style="rule.line",
+        markup=True,
+    )
+
 
 def run_queries(
     files: list[Path],
@@ -228,8 +241,14 @@ def run_queries(
     """Given a set of queries, run each."""
     for file in files:
         file = file.resolve().relative_to(Path(trapi_testing_tools.__path__[0]).parent)
+        if file.suffix != ".py":
+            console.print(
+                f"INFO: skipping {file} as it is not a python file",
+                style="italic bright_black",
+            )
+            continue
         if not file.exists():
-            console.print(f"ERROR: {file} does not exist. Skipping...")
+            console.print(f"ERROR: {file} does not exist. Skipping...", style="red")
             continue
         try:
             query = importlib.import_module(".".join(file.with_suffix("").parts))
