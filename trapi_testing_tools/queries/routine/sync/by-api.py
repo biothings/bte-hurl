@@ -1,7 +1,7 @@
-from trapi_testing_tools.tests import kg, results, logs
+from trapi_testing_tools.tests import http, kg, results, logs
 
 method = "POST"
-endpoint = "/v1/smartapi/59dce17363dce279d389100834e43648/query"
+endpoint = "/v1/smartapi/d22b657426375a5295e7da8a303b9893/query"
 body = {
     "submitter": "bte-dev-tester-manual",
     "message": {
@@ -21,6 +21,7 @@ body = {
     },
 }
 tests = [
+    http.status(200),
     kg.node_count,
     kg.edge_count,
     results.result_count,

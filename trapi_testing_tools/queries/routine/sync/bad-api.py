@@ -21,4 +21,4 @@ body = {
         }
     },
 }
-tests = [http.status(400), logs.missing_id_log]
+tests = [http.status(200), logs.missing_id_log]
