@@ -23,6 +23,7 @@ tests = [
     http.status(200),
     kg.node_count,
     kg.edge_count,
+    kg.source_record_urls,
     results.result_count,
     logs.no_error_logs,
 ]

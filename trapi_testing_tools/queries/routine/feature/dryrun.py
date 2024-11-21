@@ -1,5 +1,3 @@
-from typing import Optional
-import httpx
 from trapi_testing_tools.tests import http, results, logs
 
 method = "POST"
