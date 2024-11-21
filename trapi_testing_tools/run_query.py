@@ -83,7 +83,7 @@ def run_query(query: dict, url: str) -> tuple[Union[httpx.Response, None], bool]
             attempt = 0
             console.print(f"GET {status_url} (polling)")
 
-            while status != "Completed":
+            while status in ["Accepted", "Queued", "Running"]:
                 if time.time() > timeout:
                     timed_out = True
                     break
@@ -105,8 +105,12 @@ def run_query(query: dict, url: str) -> tuple[Union[httpx.Response, None], bool]
             passed = False
             return response, passed
 
+        response_url = body.get("response_url", None)
+        if response_url is None:
+            console.print("No response url found, query may have failed.")
+            return response, passed
+
         with console.status("Querying response endpoint..."):
-            response_url = body["response_url"]
             console.print(f"GET {response_url}")
             response = CLIENT.get(response_url)
             response.raise_for_status()
