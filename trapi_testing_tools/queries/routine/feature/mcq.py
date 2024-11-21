@@ -1,3 +1,5 @@
+from typing import Optional
+import httpx
 from trapi_testing_tools.tests import http
 
 method = "POST"
@@ -25,4 +27,10 @@ body = {
         }
     }
 }
-tests = [http.status(501)]
+
+def not_implemented_error(response: httpx.Response) -> Optional[str]:
+    body = response.json()
+    if body["description"] != "NotImplementedError":
+        return "Did not get NotImplementedError."
+
+tests = [http.status(200), not_implemented_error]
